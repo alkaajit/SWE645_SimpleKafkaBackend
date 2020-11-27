@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: swe645-restbackend
+  name: swe645-restbackend
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swe645-restbackend
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: swe645-restbackend
+    spec:
+      containers:
+        - image: swe645group/swe645_restbackend:{buildNumber}
+          name: swe645-restbackend
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: swe645-restbackend
+  name: swe645-restbackend-hpa-munr
+  namespace: default
+spec:
+  maxReplicas: 5
+  metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 80
+      type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: swe645-restbackend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  swe645-restbackend-srv
+  labels:
+    run: swe645-restbackend
+spec:
+  type: NodePort
+  ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31750
+  selector:
+    app: swe645-restbackend
