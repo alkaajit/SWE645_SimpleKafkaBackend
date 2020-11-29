@@ -24,9 +24,9 @@ public class StudentKafkaImpl {
 	// variable to hold the singleton database instance
 	private static StudentKafkaImpl instance = null;
 	public static final String TOPIC_NAME = "topic-1";
+	public static final String SERVER = "localhost:9092";
 	private Producer<Long, StudentRecord> producer;
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
-	Long counter = 0L;
 
 	private StudentKafkaImpl() {
 		setKafkaProducer();
@@ -49,7 +49,7 @@ public class StudentKafkaImpl {
 
 	private void setKafkaProducer() {
 		Properties producerProperties = new Properties();
-		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVER);
 		producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
 		producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StudentRecord.class.getName());
 		producerProperties.put(ProducerConfig.ACKS_CONFIG, "all");
@@ -58,7 +58,7 @@ public class StudentKafkaImpl {
 
 	private void setKafkaConsumer() {
 		Properties consumerProperties = new Properties();
-		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVER);
 		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "demo-group");
 		consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
 		consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StudentRecord.class.getName());
@@ -107,10 +107,11 @@ public class StudentKafkaImpl {
 
 	public void saveToDatabase(StudentBean studentBean) throws Exception {
 		Producer<Long, StudentRecord> producer = getKafkaProducer();
+		StudentRecord stdRecord = new StudentRecord(studentBean);
 		ProducerRecord<Long, StudentRecord> record = new ProducerRecord<Long, StudentRecord>(TOPIC_NAME, null,
-				counter++, new StudentRecord(studentBean));
+				Long.valueOf(stdRecord.getId()), stdRecord);
 		producer.send(record);
-		System.out.println("Send record#" + counter);
+		System.out.println("Send record#" + stdRecord);
 	}
 
 }

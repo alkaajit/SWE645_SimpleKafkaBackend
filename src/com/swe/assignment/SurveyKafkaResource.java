@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import com.swe.assignment.bean.StudentBean;
 import com.swe.assignment.dao.impl.StudentKafkaImpl;
 
-@Path("/kafka/survey")
+@Path("/survey")
 public class SurveyKafkaResource {
 
 
