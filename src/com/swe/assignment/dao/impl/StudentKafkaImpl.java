@@ -23,8 +23,8 @@ import com.swe.assignment.dao.StudentRecord;
 public class StudentKafkaImpl {
 	// variable to hold the singleton database instance
 	private static StudentKafkaImpl instance = null;
-	public static final String TOPIC_NAME = "topic-1";
-	public static final String SERVER = "localhost:9092";
+	public static final String TOPIC_NAME = "qe";
+	public static final String SERVER = "kafka-app-kafka-bootstrap:9092";
 	private Producer<Long, StudentRecord> producer;
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
 
