@@ -29,11 +29,9 @@ node {
     }
 
     stage('Deploy') {
-         withKubeConfig([credentialsId: 'rancher-login', serverUrl: 'https://ec2-3-239-59-84.compute-1.amazonaws.com/k8s/clusters/c-ndqdw']) {
+         withKubeConfig([credentialsId: 'rancher-login', serverUrl: 'https://ec2-3-89-40-188.compute-1.amazonaws.com/k8s/clusters/c-wdq5x']) {
          sh "sed -i 's/{buildNumber}/$BUILD_NUMBER/g' swe645-restbackend.yaml"
-         sh '/usr/local/bin/kubectl apply -f swe645-restbackend.yaml'
-	 sh '/usr/local/bin/kubectl apply -f kafka-topic.yaml'
-	 sh '/usr/local/bin/kubectl apply -f kafka_persistent.yaml'	 
+         sh '/usr/local/bin/kubectl apply -f swe645-restbackend.yaml' 
         }
         }
 }
