@@ -19,6 +19,7 @@ import org.apache.kafka.common.serialization.LongSerializer;
 
 import com.swe.assignment.bean.StudentBean;
 import com.swe.assignment.dao.StudentRecord;
+import java.util.UUID;
 
 public class StudentKafkaImpl {
 	// variable to hold the singleton database instance
@@ -59,7 +60,7 @@ public class StudentKafkaImpl {
 	private void setKafkaConsumer() {
 		Properties consumerProperties = new Properties();
 		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVER);
-		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "demo-group");
+		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
 		consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
 		consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StudentRecord.class.getName());
 		consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
