@@ -101,7 +101,7 @@ public class StudentKafkaImpl {
 		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
 		
-		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer2.poll(0);
+		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer2.poll(Duration.ofMillis(100));
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
@@ -119,7 +119,7 @@ public class StudentKafkaImpl {
 		// Now there is heartbeat and consumer is "alive"
 		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
-		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(0);
+		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(Duration.ofMillis(100));
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
