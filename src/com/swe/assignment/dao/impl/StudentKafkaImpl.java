@@ -103,7 +103,7 @@ public class StudentKafkaImpl {
 
 		}
 
-		kafkaConsumer.commitSync();
+		//kafkaConsumer.commitSync();
 		return studIDList;
 	}
 
