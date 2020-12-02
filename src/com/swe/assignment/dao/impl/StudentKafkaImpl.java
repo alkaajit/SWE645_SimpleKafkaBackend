@@ -28,10 +28,11 @@ public class StudentKafkaImpl {
 	public static final String SERVER = "swe645-kafka-cluster-kafka-bootstrap:9092";
 	private Producer<Long, StudentRecord> producer;
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
-
+	private KafkaConsumer<Long, StudentRecord> kafkaConsumer2;
 	private StudentKafkaImpl() {
 		setKafkaProducer();
 		setKafkaConsumer();
+		setKafkaConsumer2();
 	}
 
 	/**
@@ -68,7 +69,21 @@ public class StudentKafkaImpl {
 		consumerProperties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
 		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
 		kafkaConsumer.subscribe(Collections.singletonList(TOPIC_NAME));
-		kafkaConsumer.poll(0);
+		
+	}
+	
+	private void setKafkaConsumer2() {
+		Properties consumerProperties = new Properties();
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVER);
+		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
+		consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
+		consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StudentRecord.class.getName());
+		consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+		consumerProperties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
+		kafkaConsumer2 = new KafkaConsumer<>(consumerProperties);
+		kafkaConsumer2.subscribe(Collections.singletonList(TOPIC_NAME));
+		
 	}
 
 	private KafkaConsumer<Long, StudentRecord> getKafkaConsumer() {
@@ -81,11 +96,12 @@ public class StudentKafkaImpl {
 
 	public StudentBean readStudent(int id) throws Exception {
 		
-		//kafkaConsumer.poll(0);
+		kafkaConsumer2.poll(0);
 		// Now there is heartbeat and consumer is "alive"
 		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
-		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(0);
+		
+		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer2.poll(0);
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
@@ -99,7 +115,7 @@ public class StudentKafkaImpl {
 
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
-		//kafkaConsumer.poll(0);
+		kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
 		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
