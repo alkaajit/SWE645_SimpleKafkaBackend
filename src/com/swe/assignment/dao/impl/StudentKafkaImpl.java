@@ -78,8 +78,12 @@ public class StudentKafkaImpl {
 	}
 
 	public StudentBean readStudent(int id) throws Exception {
+		
 		kafkaConsumer.poll(0);
-		ConsumerRecords<Long, StudentRecord> records = getKafkaConsumer().poll(Duration.ofMillis(3000));
+		// Now there is heartbeat and consumer is "alive"
+		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
+		// Now consume
+		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(0);
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
@@ -94,7 +98,10 @@ public class StudentKafkaImpl {
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
 		kafkaConsumer.poll(0);
-		ConsumerRecords<Long, StudentRecord> records = getKafkaConsumer().poll(Duration.ofMillis(3000));
+		// Now there is heartbeat and consumer is "alive"
+		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
+		// Now consume
+		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(0);
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
