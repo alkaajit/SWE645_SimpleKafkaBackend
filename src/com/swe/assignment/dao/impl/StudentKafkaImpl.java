@@ -67,6 +67,7 @@ public class StudentKafkaImpl {
 		consumerProperties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
 		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
 		kafkaConsumer.subscribe(Collections.singletonList(TOPIC_NAME));
+		kafkaConsumer.poll(0);
 	}
 
 	private KafkaConsumer<Long, StudentRecord> getKafkaConsumer() {
@@ -79,9 +80,9 @@ public class StudentKafkaImpl {
 
 	public StudentBean readStudent(int id) throws Exception {
 		
-		kafkaConsumer.poll(0);
+		//kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
-		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
+		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
 		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(0);
 		System.out.println("Fetched " + records.count() + " records");
@@ -97,9 +98,9 @@ public class StudentKafkaImpl {
 
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
-		kafkaConsumer.poll(0);
+		//kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
-		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
+		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
 		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(0);
 		System.out.println("Fetched " + records.count() + " records");
