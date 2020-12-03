@@ -91,11 +91,12 @@ public class StudentKafkaImpl {
 
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
-		kafkaConsumer.poll(0);
+		//kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
-		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
+		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
-		records =  kafkaConsumer.poll(Duration.ofMillis(100));
+		//records =  kafkaConsumer.poll(Duration.ofMillis(100));
+		records =  kafkaConsumer.poll(100);
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
