@@ -96,9 +96,9 @@ public class StudentKafkaImpl {
 
 	public StudentBean readStudent(int id) throws Exception {
 		
-		kafkaConsumer2.poll(0);
+		//kafkaConsumer2.poll(0);
 		// Now there is heartbeat and consumer is "alive"
-		kafkaConsumer2.seekToBeginning(kafkaConsumer.assignment());
+		//kafkaConsumer2.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
 		
 		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer2.poll(Duration.ofMillis(100));
@@ -115,9 +115,9 @@ public class StudentKafkaImpl {
 
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
-		kafkaConsumer.poll(0);
+		//kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
-		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
+		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
 		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(Duration.ofMillis(100));
 		System.out.println("Fetched " + records.count() + " records");
