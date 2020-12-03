@@ -29,7 +29,7 @@ public class StudentKafkaImpl {
 	private Producer<Long, StudentRecord> producer;
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
 	private ConsumerRecords<Long, StudentRecord> records;
-	List<String> studlist =new ArrayList<String>();
+	List<String> studList =new ArrayList<String>();
 	private StudentKafkaImpl() {
 		setKafkaProducer();
 		setKafkaConsumer();
