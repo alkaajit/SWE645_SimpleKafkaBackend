@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -19,7 +20,6 @@ import org.apache.kafka.common.serialization.LongSerializer;
 
 import com.swe.assignment.bean.StudentBean;
 import com.swe.assignment.dao.StudentRecord;
-import java.util.UUID;
 
 public class StudentKafkaImpl {
 	// variable to hold the singleton database instance
@@ -28,11 +28,10 @@ public class StudentKafkaImpl {
 	public static final String SERVER = "swe645-kafka-cluster-kafka-bootstrap:9092";
 	private Producer<Long, StudentRecord> producer;
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
-	private KafkaConsumer<Long, StudentRecord> kafkaConsumer2;
+	private ConsumerRecords<Long, StudentRecord> records;
 	private StudentKafkaImpl() {
 		setKafkaProducer();
 		setKafkaConsumer();
-		setKafkaConsumer2();
 	}
 
 	/**
@@ -72,42 +71,19 @@ public class StudentKafkaImpl {
 		
 	}
 	
-	private void setKafkaConsumer2() {
-		Properties consumerProperties = new Properties();
-		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVER);
-		consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
-		consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
-		consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StudentRecord.class.getName());
-		consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-		consumerProperties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
-		kafkaConsumer2 = new KafkaConsumer<>(consumerProperties);
-		kafkaConsumer2.subscribe(Collections.singletonList(TOPIC_NAME));
-		
-	}
-
-	private KafkaConsumer<Long, StudentRecord> getKafkaConsumer() {
-		return kafkaConsumer;
-	}
 
 	private Producer<Long, StudentRecord> getKafkaProducer() {
 		return producer;
 	}
 
 	public StudentBean readStudent(int id) throws Exception {
-		
-		kafkaConsumer2.poll(0);
-		// Now there is heartbeat and consumer is "alive"
-		kafkaConsumer2.seekToBeginning(kafkaConsumer.assignment());
-		// Now consume
-		
-		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer2.poll(Duration.ofMillis(100));
-		System.out.println("Fetched " + records.count() + " records");
-		for (ConsumerRecord<Long, StudentRecord> record : records) {
-			System.out.println("Received: " + record.key() + ":" + record.value());
-			StudentRecord temp = (StudentRecord) record.value();
-			if (id == temp.getId()) {
-				return temp.convert();
+		if(null!=records) {
+			for (ConsumerRecord<Long, StudentRecord> record : records) {
+				System.out.println("Received: " + record.key() + ":" + record.value());
+				StudentRecord temp = (StudentRecord) record.value();
+				if (id == temp.getId()) {
+					return temp.convert();
+				}
 			}
 		}
 		return null;
@@ -119,7 +95,7 @@ public class StudentKafkaImpl {
 		// Now there is heartbeat and consumer is "alive"
 		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
-		ConsumerRecords<Long, StudentRecord> records =  kafkaConsumer.poll(Duration.ofMillis(100));
+		records =  kafkaConsumer.poll(Duration.ofMillis(100));
 		System.out.println("Fetched " + records.count() + " records");
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
