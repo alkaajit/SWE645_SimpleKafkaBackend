@@ -115,7 +115,7 @@ public class StudentKafkaImpl {
 
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
-		//kafkaConsumer.poll(0);
+		kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
 		//kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
 		// Now consume
