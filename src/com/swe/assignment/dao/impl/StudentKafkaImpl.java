@@ -30,6 +30,7 @@ public class StudentKafkaImpl {
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
 	private ConsumerRecords<Long, StudentRecord> records;
 	List<String> studList =new ArrayList<String>();
+	List<StudentBean> sb =new ArrayList<StudentBean>();
 	private StudentKafkaImpl() {
 		setKafkaProducer();
 		setKafkaConsumer();
@@ -78,21 +79,25 @@ public class StudentKafkaImpl {
 	}
 
 	public StudentBean readStudent(int id) throws Exception {
-		if(null!=records) {
-			for (ConsumerRecord<Long, StudentRecord> record : records) {
-				System.out.println("Received: " + record.key() + ":" + record.value());
-				StudentRecord temp = (StudentRecord) record.value();
-				if (id == temp.getId()) {
-					return temp.convert();
+		//if(null!=records) {
+			//for (ConsumerRecord<Long, StudentRecord> record : records) {
+				//System.out.println("Received: " + record.key() + ":" + record.value());
+				//StudentRecord temp = (StudentRecord) record.value();
+		for(StudentRecord s:sb){
+				if (id == s.getId()) {
+					return s.convert();
 				}
-			}
+			//}
+		//}
 		}
 		return null;
 	}
 
 	public List<String> readStudentIds() throws Exception {
 		List<String> studIDList = new ArrayList<String>();
-		
+		if(!sb.isEmpty()){
+		sb.clear();
+		}
 		kafkaConsumer.poll(0);
 		// Now there is heartbeat and consumer is "alive"
 		kafkaConsumer.seekToBeginning(kafkaConsumer.assignment());
@@ -103,6 +108,7 @@ public class StudentKafkaImpl {
 		for (ConsumerRecord<Long, StudentRecord> record : records) {
 			System.out.println("Received: " + record.key() + ":" + record.value());
 			StudentRecord temp = (StudentRecord) record.value();
+			sb.add(temp);
 			studIDList.add(String.valueOf(temp.getId()));
 			
 
@@ -111,6 +117,7 @@ public class StudentKafkaImpl {
 			if(!studList.contains(s)){
 			studList.add(s);	
 			}
+			
 		}
 
 		//kafkaConsumer.commitSync();
