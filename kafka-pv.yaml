@@ -1,0 +1,123 @@
+kind: List
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: swe645-hw4-0
+    spec:
+      capacity:
+        storage: 3Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      hostPath:
+        path: "/mnt/swe645-hw4-0"
+      nodeAffinity:
+        required:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - ip-172-31-71-215
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: swe645-hw4-1
+    spec:
+      capacity:
+        storage: 3Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      hostPath:
+        path: "/mnt/swe645-hw4-1"
+      nodeAffinity:
+        required:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - ip-172-31-71-215
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: swe645-hw4-2
+    spec:
+      capacity:
+        storage: 3Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      hostPath:
+        path: "/mnt/swe645-hw4-2"
+      nodeAffinity:
+        required:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - ip-172-31-71-215
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: swe645-hw4-3
+    spec:
+      capacity:
+        storage: 3Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      hostPath:
+        path: "/mnt/swe645-hw4-3"
+      nodeAffinity:
+        required:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - ip-172-31-71-215
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: swe645-hw4-4
+    spec:
+      capacity:
+        storage: 3Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      hostPath:
+        path: "/mnt/swe645-hw4-4"
+      nodeAffinity:
+        required:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - ip-172-31-71-215
+  - apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: swe645-hw4-5
+    spec:
+      capacity:
+        storage: 3Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      hostPath:
+        path: "/mnt/swe645-hw4-5"
+      nodeAffinity:
+        required:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - ip-172-31-71-215
