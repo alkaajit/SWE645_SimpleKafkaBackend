@@ -30,7 +30,7 @@ public class StudentKafkaImpl {
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
 	private ConsumerRecords<Long, StudentRecord> records;
 	List<String> studList =new ArrayList<String>();
-	List<StudentBean> sb =new ArrayList<StudentBean>();
+	List<StudentRecord> sb =new ArrayList<StudentRecord>();
 	private StudentKafkaImpl() {
 		setKafkaProducer();
 		setKafkaConsumer();
