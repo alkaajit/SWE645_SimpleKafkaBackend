@@ -113,15 +113,15 @@ public class StudentKafkaImpl {
 			
 
 		}
-		for(String s: studIDList){
+		/*for(String s: studIDList){
 			if(!studList.contains(s)){
 			studList.add(s);	
-			}
+			}*/
 			
-		}
+		//}
 
 		//kafkaConsumer.commitSync();
-		return studList;
+		return studIDList;
 	}
 
 	public void saveToDatabase(StudentBean studentBean) throws Exception {
