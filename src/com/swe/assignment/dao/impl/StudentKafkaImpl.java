@@ -30,7 +30,7 @@ public class StudentKafkaImpl {
 	private KafkaConsumer<Long, StudentRecord> kafkaConsumer;
 	private ConsumerRecords<Long, StudentRecord> records;
 	List<String> studList =new ArrayList<String>();
-	//List<StudentRecord> sb =new ArrayList<StudentRecord>();
+	List<StudentRecord> sb =new ArrayList<StudentRecord>();
 	private StudentKafkaImpl() {
 		setKafkaProducer();
 		setKafkaConsumer();
@@ -83,9 +83,12 @@ public class StudentKafkaImpl {
 			for (ConsumerRecord<Long, StudentRecord> record : records) {
 				System.out.println("Received: " + record.key() + ":" + record.value());
 				StudentRecord temp = (StudentRecord) record.value();
-		
-				if (id == temp.getId()) {
-					return temp.convert();
+				sb.add(temp);
+			}
+			
+			for(StudentRecord s: sb){
+				if (id == s.getId()) {
+					return s.convert();
 				}
 			}
 		}
